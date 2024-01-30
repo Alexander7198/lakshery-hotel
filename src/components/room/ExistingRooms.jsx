@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { getAllRooms } from "../utils/ApiFunctions";
+import { deleteRoom, getAllRooms } from "../utils/ApiFunctions";
 import RoomPaginator from "../common/RoomPaginator";
-import { Col } from "react-bootstrap"
-import RoomFilter from "../common/RoomFilter"
+import { Col } from "react-bootstrap";
+import RoomFilter from "../common/RoomFilter";
+import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
+import { Link } from "react-router-dom";
+
 
 const ExistingRooms = () => {
     const [rooms, setRooms] = useState([{ id: "", roomType: "", roomPrice: "" }])
@@ -47,6 +50,24 @@ const ExistingRooms = () => {
         setCurrentPage(pageNumber)
     }
 
+    const handleDelete = async (roomId) => {
+        try {
+            const result = await deleteRoom(roomId)
+            if (result === "") {
+                setSuccessMessage(`Room No ${roomId} was delete`)
+                fetchRooms()
+            } else {
+                console.error(`Error deleting room : ${result.message}`)
+            }
+        } catch (error) {
+            setErrorMessage(error.message)
+        }
+        setTimeout(() => {
+            setSuccessMessage("")
+            setErrorMessage("")
+        }, 3000)
+    }
+
 
     const calculateTotalPages = (filteredRooms, roomsPerPage, rooms) => {
         const totalRooms = filteredRooms.length > 0 ? filteredRooms.length : rooms.length
@@ -66,7 +87,7 @@ const ExistingRooms = () => {
             ) : (
                 <>
                     <section className="mt-5 mb-5 container">
-                        <div className="d-flex justify-content-between mb-3 mt-5">
+                        <div className="d-flex justify-content-between mb-3 mt-5" >
                             <h2>Existing Rooms</h2>
                         </div>
 
@@ -89,10 +110,21 @@ const ExistingRooms = () => {
                                         <td>{room.id}</td>
                                         <td>{room.roomType}</td>
                                         <td>{room.roomPrice}</td>
-                                        <td>
-                                            <button>View / Edit</button>
-                                            <button>Delete</button>
+                                        <td className="gap-2">
+                                            <Link to={`/edit-room/${room.id}`} className="gap-2">
+                                                <span className="btn btn-info btn-sm">
+                                                    <FaEye />
+                                                </span>
+                                                <span className="btn btn-warning btn-sm">
+                                                    <FaEdit />
+                                                </span>
+                                            </Link>
 
+                                            <button
+                                                className="btn btn-danger btn-sm"
+                                                onClick={() => handleDelete(room.id)}>
+                                                <FaTrashAlt />
+                                            </button>
                                         </td>
                                     </tr>
                                 ))}
@@ -108,7 +140,8 @@ const ExistingRooms = () => {
                     </section>
                 </>
 
-            )}
+            )
+            }
 
         </>
     )
