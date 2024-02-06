@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import EditRoom from './components/room/EditRoom'
 import Home from './components/home/Home'
 import ExistingRooms from './components/room/ExistingRooms'
+import AddRoom from './components/room/AddRoom'
 
 
 
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/edit-room/:roomId" element={<EditRoom />} />
           <Route path="/existing-rooms" element={<ExistingRooms />} />
+          <Route path="/add-room" element={<AddRoom />} />
         </Routes>
       </Router>
     </main>
