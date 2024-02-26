@@ -1,7 +1,7 @@
 import axios from "axios"
 
 export const api = axios.create({
-    baseURL: "http://localhost:9192"
+    baseURL: "http://localhost:8080"
 })
 
 // This function adds a new room to the database
@@ -119,4 +119,13 @@ export async function cancelBooking(bookingId) {
     } catch (error) {
         throw new Error(`Error cancelling booking :${error.message}`)
     }
+}
+
+/* This function gets all availavle rooms from the database with a given date and a room type */
+export async function getAvailableRooms(checkInDate, checkOutDate, roomType) {
+    const result = await api.get(
+        `rooms/available-rooms?checkInDate=${checkInDate}
+		&checkOutDate=${checkOutDate}&roomType=${roomType}`
+    )
+    return result
 }
