@@ -97,7 +97,7 @@ export async function getAllBookings() {
     }
 }
 
-/* This function get booking by the cnfirmation code */
+/* This function get booking by the confirmation code */
 export async function getBookingByConfirmationCode(confirmationCode) {
     try {
         const result = await api.get(`/bookings/confirmation/${confirmationCode}`)
